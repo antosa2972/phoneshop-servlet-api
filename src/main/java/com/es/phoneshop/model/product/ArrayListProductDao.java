@@ -40,10 +40,13 @@ public class ArrayListProductDao implements ProductDao {
     }
 
     //todo sort num of equal words
-    private boolean wordSearch(String[] words, String description) {
-
-        return Arrays.stream(words)
-                .allMatch(word -> description.toLowerCase(Locale.ROOT).contains(word.toLowerCase(Locale.ROOT)));
+    private long wordSearch(String[] words, String description) {
+        long counter = 0;
+        List<String> wordsList = Arrays.asList(words);
+        counter = wordsList.stream().
+                filter(word -> description.contains(word)).
+                count();
+        return counter;
     }
 
     @Override
@@ -55,17 +58,29 @@ public class ArrayListProductDao implements ProductDao {
                 return (Comparable) product.getPrice();
             }
         });
-        if(sortOrder==SortOrder.desc){
-            comparator=comparator.reversed();
+        if (sortOrder == SortOrder.desc) {
+            comparator = comparator.reversed();
         }
-        //todo sort order
-        return products.stream()
-                .filter(product -> query == null || query.isEmpty() || wordSearch(query.split("\\s"), product.getDescription()))
+        List<Product> productList = products.stream()
+                .filter(product -> query == null || query.isEmpty() || wordSearch(query.split("\\s"), product.getDescription()) > 0)
                 .filter(product -> product.getPrice() != null)
                 .filter(this::productIsInStock)
-                .sorted(comparator)
+                //.sorted(comparator)
                 .collect(Collectors.toList());
+
+        if (query != null) {
+            List<Long> coincidenceList = new ArrayList<>();
+            productList.forEach(product -> coincidenceList.add(wordSearch(query.split("\\s"), product.getDescription())));
+            Map<Long, Product> numOfCoincidence = new HashMap<>();
+            for (Long cc: coincidenceList) {
+                numOfCoincidence.put(cc,productList.get(coincidenceList.indexOf(cc)));
+                System.out.println(cc);
+            }
+        }
+
+        return productList;
     }
+
 
     private boolean productIsInStock(Product product) {
         return product.getStock() > 0;
