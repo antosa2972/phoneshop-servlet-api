@@ -1,6 +1,5 @@
 package com.es.phoneshop.model.product;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -39,19 +38,25 @@ public class ArrayListProductDao implements ProductDao {
         }
     }
 
-    //todo sort num of equal words
-    private long wordSearch(String[] words, String description) {
-        long counter = 0;
+    public double wordCoincidenceSearch(String[] words, String description) {
+        double counter = 0;
         List<String> wordsList = Arrays.asList(words);
-        counter = wordsList.stream().
-                filter(word -> description.contains(word)).
-                count();
-        return counter;
+        List<String> descriptionWords = Arrays.asList(description.split("\\s"));
+        counter = wordsList.stream()
+                .filter(word -> descriptionWords.stream().anyMatch(descriptionWord -> descriptionWord.contains(word)))
+                .count();
+
+        if (counter != 0) {
+            return 100000 - (counter * (double) 100 / (double) (descriptionWords.size() - 1));
+        } else return 0;
     }
 
     @Override
     public synchronized List<Product> findProducts(String query, SortField sortField, SortOrder sortOrder) {
         Comparator<Product> comparator = Comparator.comparing(product -> {
+            if (sortField == null || sortOrder == null) {
+                return (Comparable) 0;
+            }
             if (sortField != null && SortField.description == sortField) {
                 return (Comparable) product.getDescription();
             } else {
@@ -62,22 +67,18 @@ public class ArrayListProductDao implements ProductDao {
             comparator = comparator.reversed();
         }
         List<Product> productList = products.stream()
-                .filter(product -> query == null || query.isEmpty() || wordSearch(query.split("\\s"), product.getDescription()) > 0)
+                .filter(product -> query == null || query.isEmpty() || wordCoincidenceSearch(query.split("\\s"), product.getDescription()) > 0)
                 .filter(product -> product.getPrice() != null)
                 .filter(this::productIsInStock)
-                //.sorted(comparator)
+                .sorted(Comparator.comparingDouble(product -> {
+                    if (query != null) {
+                        return wordCoincidenceSearch(query.split("\\s"), product.getDescription());
+                    } else {
+                        return 0;
+                    }
+                }))
+                .sorted(comparator)
                 .collect(Collectors.toList());
-
-        if (query != null) {
-            List<Long> coincidenceList = new ArrayList<>();
-            productList.forEach(product -> coincidenceList.add(wordSearch(query.split("\\s"), product.getDescription())));
-            Map<Long, Product> numOfCoincidence = new HashMap<>();
-            for (Long cc: coincidenceList) {
-                numOfCoincidence.put(cc,productList.get(coincidenceList.indexOf(cc)));
-                System.out.println(cc);
-            }
-        }
-
         return productList;
     }
 
