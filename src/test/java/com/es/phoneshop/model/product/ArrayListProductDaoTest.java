@@ -7,16 +7,12 @@ import org.junit.Test;
 
 import javax.servlet.ServletContextEvent;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class ArrayListProductDaoTest {
     private ProductDao productDao;
-    DemoDataServletContextListener demoDataServletContextListener = new DemoDataServletContextListener();
 
     @Before
     public void setup() {
@@ -63,8 +59,35 @@ public class ArrayListProductDaoTest {
         product = productDao.getProduct(id);
     }
     @Test
-    public void searchProductsTest(){
-
+    public void wordCoincidenceSearchTest1(){
+        String[] words = {"test1","test2","test3"};
+        ArrayListProductDao arrayListProductDao = (ArrayListProductDao) ArrayListProductDao.getInstance();
+        assertFalse(arrayListProductDao.wordCoincidenceSearch(words, "")<0);
+    }
+    @Test
+    public void wordCoincidenceSearchTest2(){
+        String[] words = {"test1","test2","test"};
+        ArrayListProductDao arrayListProductDao = (ArrayListProductDao) ArrayListProductDao.getInstance();
+        assertTrue(arrayListProductDao.wordCoincidenceSearch(words, "test should pass")>1);
+    }
+    @Test(expected = NullPointerException.class)
+    public void wordCoincidenceSearchTest3(){
+        String[] words = {"test1",null,"test"};
+        ArrayListProductDao arrayListProductDao = (ArrayListProductDao) ArrayListProductDao.getInstance();
+        assertTrue(arrayListProductDao.wordCoincidenceSearch(words, "test should pass")>1);
+    }
+    @Test(expected = NullPointerException.class)
+    public void wordCoincidenceSearchTest4(){
+        String[] words = {"test1","test2","test"};
+        ArrayListProductDao arrayListProductDao = (ArrayListProductDao) ArrayListProductDao.getInstance();
+        assertTrue(arrayListProductDao.wordCoincidenceSearch(words, null)==0);
+    }
+    @Test
+    public void wordCoincidenceSearchTest5(){
+        String[] words = {"test","test","test"};
+        ArrayListProductDao arrayListProductDao = (ArrayListProductDao) ArrayListProductDao.getInstance();
+        double value = arrayListProductDao.wordCoincidenceSearch(words,"testtesttesttesttesttesttesttesttesttesttesttestesttesttesttesttest");
+        assertFalse(value>0);
     }
 }
 
