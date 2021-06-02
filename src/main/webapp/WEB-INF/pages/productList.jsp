@@ -5,27 +5,54 @@
 
 <jsp:useBean id="products" type="java.util.ArrayList" scope="request"/>
 <tags:master pageTitle="Product List">
-  <p>
-    Welcome to Expert-Soft training!
-  </p>
-  <table>
-    <thead>
-      <tr>
-        <td>Image</td>
-        <td>Description</td>
-        <td class="price">Price</td>
-      </tr>
-    </thead>
-    <c:forEach var="product" items="${products}">
-      <tr>
-        <td>
-          <img class="product-tile" src="https://raw.githubusercontent.com/andrewosipenko/phoneshop-ext-images/master/${product.imageUrl}">
-        </td>
-        <td>${product.description}</td>
-        <td class="price">
-          <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="${product.currency.symbol}"/>
-        </td>
-      </tr>
-    </c:forEach>
-  </table>
+    <p>
+        Welcome to Expert-Soft training!
+    </p>
+    <form>
+        <input name="query" value="${param.query}">
+        <button>Search</button>
+    </form>
+    <table>
+        <thead>
+        <tr>
+            <td>Image</td>
+            <td>
+                Description
+                <tags:sortLink sort="description" order="asc"/>
+                <tags:sortLink sort="description" order="desc"/>
+            </td>
+            <td class="price">
+                Price
+                <tags:sortLink sort="price" order="asc"/>
+                <tags:sortLink sort="price" order="desc"/>
+            </td>
+        </tr>
+        </thead>
+        <c:forEach var="product" items="${products}">
+            <tr>
+                <td>
+                    <img class="product-tile" src="${product.imageUrl}">
+                </td>
+                <td>
+                    <a href="${pageContext.servletContext.contextPath}/products/${product.id}">
+                            ${product.description}
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:showPopUp(${product.id})">
+                        <fmt:formatNumber value="${product.price}" type="currency"
+                                          currencySymbol="${product.currency.symbol}"/>
+                        <script>
+                            function showPopUp(prodId) {
+                                var id = prodId;
+                                var link = "${pageContext.servletContext.contextPath}/price_history/" + id.toString();
+                                window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes," +
+                                    "top=500,left=500,width=450,height=400");
+                            }
+                        </script>
+                    </a>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
 </tags:master>
