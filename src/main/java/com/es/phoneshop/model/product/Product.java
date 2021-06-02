@@ -19,7 +19,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceHistory> history) {
+    public Product(Long id, String code, String description, BigDecimal price, Currency currency, int stock,
+                   String imageUrl, List<PriceHistory> history) {
         this.id = id;
         this.code = code;
         this.description = description;
@@ -29,7 +30,8 @@ public class Product {
         this.imageUrl = imageUrl;
         this.history = history;
     }
-    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl, List<PriceHistory> history) {
+    public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl,
+                   List<PriceHistory> history) {
         this.code = code;
         this.description = description;
         this.price = price;

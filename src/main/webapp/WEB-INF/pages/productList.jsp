@@ -46,7 +46,8 @@
                             function showPopUp(prodId) {
                                 var id = prodId;
                                 var link = "${pageContext.servletContext.contextPath}/price_history/" + id.toString();
-                                window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=450,height=400");
+                                window.open(link, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes," +
+                                    "top=500,left=500,width=450,height=400");
                             }
                         </script>
                     </a>

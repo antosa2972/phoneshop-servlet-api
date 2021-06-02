@@ -67,7 +67,8 @@ public class ArrayListProductDao implements ProductDao {
             comparator = comparator.reversed();
         }
         List<Product> productList = products.stream()
-                .filter(product -> query == null || query.isEmpty() || wordCoincidenceSearch(query.split("\\s"), product.getDescription()) > 0)
+                .filter(product -> query == null || query.isEmpty() ||
+                        wordCoincidenceSearch(query.split("\\s"), product.getDescription()) > 0)
                 .filter(product -> product.getPrice() != null)
                 .filter(this::productIsInStock)
                 .sorted(Comparator.comparingDouble(product -> {
