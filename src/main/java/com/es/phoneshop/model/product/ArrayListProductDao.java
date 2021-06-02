@@ -57,13 +57,13 @@ public class ArrayListProductDao implements ProductDao {
             if (sortField == null || sortOrder == null) {
                 return (Comparable) 0;
             }
-            if (sortField != null && SortField.description == sortField) {
+            if (sortField != null && SortField.DESCRIPTION == sortField) {
                 return (Comparable) product.getDescription();
             } else {
                 return (Comparable) product.getPrice();
             }
         });
-        if (sortOrder == SortOrder.desc) {
+        if (sortOrder == SortOrder.DESC) {
             comparator = comparator.reversed();
         }
         List<Product> productList = products.stream()

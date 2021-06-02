@@ -1,11 +1,8 @@
 package com.es.phoneshop.model.product;
 
-import com.es.phoneshop.web.DemoDataServletContextListener;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.servlet.ServletContextEvent;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -20,7 +17,7 @@ public class ArrayListProductDaoTest {
     }
     @Test
     public void testFindProductsNoResults() {
-        assertTrue(productDao.findProducts("fjuruih",SortField.description,SortOrder.asc).isEmpty());
+        assertTrue(productDao.findProducts("fjuruih",SortField.DESCRIPTION,SortOrder.ASC).isEmpty());
     }
     @Test
     public void testSaveNewProduct() throws ProductNotFoundException {
@@ -36,7 +33,7 @@ public class ArrayListProductDaoTest {
 
     @Test
     public void findProductWithZeroStock() {
-        List<Product> productList = productDao.findProducts("samsung s",SortField.description,SortOrder.asc);
+        List<Product> productList = productDao.findProducts("samsung s",SortField.DESCRIPTION,SortOrder.ASC);
         for (Product prod :
                 productList) {
             assertFalse(prod.getStock() < 0);
@@ -44,7 +41,7 @@ public class ArrayListProductDaoTest {
     }
     @Test
     public void findNullPriceProduct() {
-        List<Product> productList = productDao.findProducts("samsung s",SortField.description,SortOrder.asc);
+        List<Product> productList = productDao.findProducts("samsung s",SortField.DESCRIPTION,SortOrder.ASC);
         for (Product prod :
                 productList) {
             assertNotNull(prod.getPrice());
