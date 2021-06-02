@@ -70,7 +70,7 @@ public class ArrayListProductDao implements ProductDao {
                 .filter(product -> query == null || query.isEmpty() ||
                         wordCoincidenceSearch(query.split("\\s"), product.getDescription()) > 0)
                 .filter(product -> product.getPrice() != null)
-                .filter(this::productIsInStock)
+                .filter(this::isProductInStock)
                 .sorted(Comparator.comparingDouble(product -> {
                     if (query != null) {
                         return wordCoincidenceSearch(query.split("\\s"), product.getDescription());
@@ -84,7 +84,7 @@ public class ArrayListProductDao implements ProductDao {
     }
 
 
-    private boolean productIsInStock(Product product) {
+    private boolean isProductInStock(Product product) {
         return product.getStock() > 0;
     }
 
