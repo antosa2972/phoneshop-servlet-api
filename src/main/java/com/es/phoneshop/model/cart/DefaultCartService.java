@@ -5,15 +5,18 @@ import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DefaultCartService implements CartService {
 
     private static final String CART_SESSION_ATTRIBUTE = DefaultCartService.class.getName() + ".cart";
     private final ProductDao productDao;
+    private Set<Product> recentlyViewedProducts;
 
     private DefaultCartService() {
         productDao = ArrayListProductDao.getInstance();
+        recentlyViewedProducts = new TreeSet<>();
     }
 
     private static class SingletonHelper {
@@ -23,12 +26,16 @@ public class DefaultCartService implements CartService {
     public static DefaultCartService getInstance() {
         return SingletonHelper.INSTANCE;
     }
+    @Override
+    public Set<Product> getRecentlyViewedProducts() {
+        return recentlyViewedProducts;
+    }
 
     @Override
     public synchronized Cart getCart(HttpServletRequest request) {
         Cart cart = (Cart) request.getSession().getAttribute(CART_SESSION_ATTRIBUTE);
-        if(cart == null){
-            request.getSession().setAttribute(CART_SESSION_ATTRIBUTE,cart = new Cart());
+        if (cart == null) {
+            request.getSession().setAttribute(CART_SESSION_ATTRIBUTE, cart = new Cart());
         }
         return cart;
     }
