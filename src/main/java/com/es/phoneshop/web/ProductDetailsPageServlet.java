@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Locale;
+import java.util.Iterator;
 
 public class ProductDetailsPageServlet extends HttpServlet {
     private ProductDao productDao;
@@ -30,6 +30,13 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Long id = parseProductId(request);
+        if (cartService.getRecentlyViewedProducts().size() >= 3) {
+            Iterator<Product> iterator = cartService.getRecentlyViewedProducts().iterator();
+            iterator.next();
+            iterator.remove();
+        }
+        cartService.getRecentlyViewedProducts().add(productDao.getProduct(id));
+        request.getSession().setAttribute("recentlyViewedProducts",cartService.getRecentlyViewedProducts());
         request.setAttribute("product", productDao.getProduct(id));
         request.setAttribute("cart", cartService.getCart(request));
         request.getRequestDispatcher("/WEB-INF/pages/product.jsp").forward(request, response);
