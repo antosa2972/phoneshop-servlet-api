@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 
-public class Product {
+public class Product implements Comparable<Product> {
     private Long id;
     private String code;
     private String description;
@@ -99,5 +99,12 @@ public class Product {
 
     public List<PriceHistory> getHistory() {
         return history;
+    }
+
+    @Override
+    public int compareTo(Product otherProduct) {
+        if(otherProduct.getId().equals(this.id))
+            return 0;
+        return 1;
     }
 }
