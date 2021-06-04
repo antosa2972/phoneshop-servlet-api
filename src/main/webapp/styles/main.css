@@ -33,6 +33,10 @@ img.product-tile {
 .success{
   color: green;
 }
+.recently-viewed-table{
+  table-layout: fixed;
+  table-border-color-dark: #2b2b2b;
+}
 
 /* Page specific styles */
 body.product-list {
