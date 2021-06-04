@@ -4,7 +4,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 
 <jsp:useBean id="product" type="com.es.phoneshop.model.product.Product" scope="request"/>
-<tags:master pageTitle="Price history">
+<tags:price_history pageTitle="Price History">
     <h2>
         Product ${product.description}
     </h2>
@@ -26,4 +26,4 @@
         </tr>
         </c:forEach>
     </table>
-</tags:master>
+</tags:price_history>
