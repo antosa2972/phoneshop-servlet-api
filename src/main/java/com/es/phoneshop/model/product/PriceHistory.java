@@ -13,11 +13,11 @@ public class PriceHistory {
     }
 
     public String getDate() {
-        String dateStr="";
-        dateStr+=date.get(Calendar.DAY_OF_MONTH);
-        dateStr+= " ";
+        String dateStr = "";
+        dateStr += date.get(Calendar.DAY_OF_MONTH);
+        dateStr += " ";
         dateStr += date.get(Calendar.MONTH);
-        dateStr+= " ";
+        dateStr += " ";
         dateStr += date.get(Calendar.YEAR);
         return dateStr;
     }
