@@ -12,11 +12,9 @@ public class DefaultCartService implements CartService {
 
     private static final String CART_SESSION_ATTRIBUTE = DefaultCartService.class.getName() + ".cart";
     private final ProductDao productDao;
-    private Set<Product> recentlyViewedProducts;
 
     private DefaultCartService() {
         productDao = ArrayListProductDao.getInstance();
-        recentlyViewedProducts = new TreeSet<>();
     }
 
     private static class SingletonHelper {
@@ -25,10 +23,6 @@ public class DefaultCartService implements CartService {
 
     public static DefaultCartService getInstance() {
         return SingletonHelper.INSTANCE;
-    }
-    @Override
-    public Set<Product> getRecentlyViewedProducts() {
-        return recentlyViewedProducts;
     }
 
     @Override
@@ -62,6 +56,7 @@ public class DefaultCartService implements CartService {
                     try {
                         exceptionCheck(product, newQuantity);
                     } catch (OutOfStockException e) {
+                        e.printStackTrace();
                     }
                     cart.getItems().set(indexOfElementToUpdate, new CartItem(product, newQuantity));
                     isProductUpdated.set(true);

@@ -15,8 +15,12 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ProductDetailsPageServlet extends HttpServlet {
+    public static final String ERROR_ATTR = "error";
+    public static final String RECENTLY_VIEWED_PRODUCTS = "recentlyViewedProducts";
     private ProductDao productDao;
     private CartService cartService;
 
@@ -29,19 +33,25 @@ public class ProductDetailsPageServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long id = parseProductId(request);
-        if (cartService.getRecentlyViewedProducts().size() >= 3) {
-            Iterator<Product> iterator = cartService.getRecentlyViewedProducts().iterator();
-            iterator.next();
-            iterator.remove();
+        Set<Product> recentlyViewedProducts = (Set<Product>) request.getSession().getAttribute(RECENTLY_VIEWED_PRODUCTS);
+        if(recentlyViewedProducts == null){
+            recentlyViewedProducts = new TreeSet<>();
         }
-        cartService.getRecentlyViewedProducts().add(productDao.getProduct(id));
-        request.getSession().setAttribute("recentlyViewedProducts",cartService.getRecentlyViewedProducts());
+        Long id = parseProductId(request);
+        if (recentlyViewedProducts.size() >= 3) {
+            deleteElement(recentlyViewedProducts);
+        }
+        recentlyViewedProducts.add(productDao.getProduct(id));
+        request.getSession().setAttribute(RECENTLY_VIEWED_PRODUCTS, recentlyViewedProducts);
         request.setAttribute("product", productDao.getProduct(id));
         request.setAttribute("cart", cartService.getCart(request));
         request.getRequestDispatcher("/WEB-INF/pages/product.jsp").forward(request, response);
     }
-
+    private void deleteElement(Set<Product> recentlyViewedProducts){
+        Iterator<Product> iterator = recentlyViewedProducts.iterator();
+        iterator.next();
+        iterator.remove();
+    }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String quantityString = req.getParameter("quantity");
@@ -50,16 +60,19 @@ public class ProductDetailsPageServlet extends HttpServlet {
         try {
             NumberFormat format = NumberFormat.getInstance(req.getLocale());
             quantity = format.parse(quantityString).intValue();
+            if (quantity <= 0) {
+                throw new ParseException("Number is less than zero", 0);
+            }
         } catch (ParseException e) {
-            req.setAttribute("error", "Not a number");
+            req.setAttribute(ERROR_ATTR, "Not correct number");
             doGet(req, resp);
             return;
         }
         Cart cart = cartService.getCart(req);
         try {
-            cartService.add(cart, id, (Integer.valueOf(quantity)));
+            cartService.add(cart, id, (quantity));
         } catch (OutOfStockException e) {
-            req.setAttribute("error", "Out of stock, available " + e.getStockAvailable());
+            req.setAttribute(ERROR_ATTR, "Out of stock, available " + e.getStockAvailable());
             doGet(req, resp);
             return;
         }

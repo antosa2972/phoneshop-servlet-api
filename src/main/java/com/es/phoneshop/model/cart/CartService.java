@@ -7,6 +7,6 @@ import java.util.Set;
 
 public interface CartService {
     Cart getCart(HttpServletRequest httpServletRequest);
-    void add(Cart cart, Long productId,int quantity) throws OutOfStockException;
-    Set<Product> getRecentlyViewedProducts();
+
+    void add(Cart cart, Long productId, int quantity) throws OutOfStockException;
 }
