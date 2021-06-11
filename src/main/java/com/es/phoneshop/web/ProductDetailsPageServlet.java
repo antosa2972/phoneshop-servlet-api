@@ -4,7 +4,9 @@ import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.CartService;
 import com.es.phoneshop.model.cart.DefaultCartService;
 import com.es.phoneshop.model.cart.OutOfStockException;
-import com.es.phoneshop.model.product.*;
+import com.es.phoneshop.model.product.ArrayListProductDao;
+import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -34,7 +36,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Set<Product> recentlyViewedProducts = (Set<Product>) request.getSession().getAttribute(RECENTLY_VIEWED_PRODUCTS);
-        if(recentlyViewedProducts == null){
+        if (recentlyViewedProducts == null) {
             recentlyViewedProducts = new TreeSet<>();
         }
         Long id = parseProductId(request);
@@ -47,11 +49,13 @@ public class ProductDetailsPageServlet extends HttpServlet {
         request.setAttribute("cart", cartService.getCart(request));
         request.getRequestDispatcher("/WEB-INF/pages/product.jsp").forward(request, response);
     }
-    private void deleteElement(Set<Product> recentlyViewedProducts){
+
+    private void deleteElement(Set<Product> recentlyViewedProducts) {
         Iterator<Product> iterator = recentlyViewedProducts.iterator();
         iterator.next();
         iterator.remove();
     }
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String quantityString = req.getParameter("quantity");
@@ -70,7 +74,7 @@ public class ProductDetailsPageServlet extends HttpServlet {
         }
         Cart cart = cartService.getCart(req);
         try {
-            cartService.add(cart, id, (quantity));
+            cartService.add(cart, id, quantity);
         } catch (OutOfStockException e) {
             req.setAttribute(ERROR_ATTR, "Out of stock, available " + e.getStockAvailable());
             doGet(req, resp);
