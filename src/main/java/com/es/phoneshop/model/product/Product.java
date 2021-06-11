@@ -4,13 +4,17 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 
-public class Product {
+public class Product implements Comparable<Product> {
     private Long id;
     private String code;
     private String description;
-    /** null means there is no price because the product is outdated or new */
+    /**
+     * null means there is no price because the product is outdated or new
+     */
     private BigDecimal price;
-    /** can be null if the price is null */
+    /**
+     * can be null if the price is null
+     */
     private Currency currency;
     private int stock;
     private String imageUrl;
@@ -30,6 +34,7 @@ public class Product {
         this.imageUrl = imageUrl;
         this.history = history;
     }
+
     public Product(String code, String description, BigDecimal price, Currency currency, int stock, String imageUrl,
                    List<PriceHistory> history) {
         this.code = code;
@@ -99,5 +104,12 @@ public class Product {
 
     public List<PriceHistory> getHistory() {
         return history;
+    }
+
+    @Override
+    public int compareTo(Product otherProduct) {
+        if (otherProduct.getId().equals(this.id))
+            return 0;
+        return 1;
     }
 }

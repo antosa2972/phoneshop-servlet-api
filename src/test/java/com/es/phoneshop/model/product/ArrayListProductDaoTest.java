@@ -1,5 +1,7 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.enumsort.SortField;
+import com.es.phoneshop.model.enumsort.SortOrder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +19,7 @@ public class ArrayListProductDaoTest {
     }
     @Test
     public void testFindProductsNoResults() {
-        assertTrue(productDao.findProducts("fjuruih",SortField.DESCRIPTION,SortOrder.ASC).isEmpty());
+        assertTrue(productDao.findProducts("fjuruih", SortField.DESCRIPTION, SortOrder.ASC).isEmpty());
     }
     @Test
     public void testSaveNewProduct() throws ProductNotFoundException {
