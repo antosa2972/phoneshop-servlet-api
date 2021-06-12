@@ -1,5 +1,9 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.cart.CartService;
+import com.es.phoneshop.model.cart.DefaultCartService;
+import com.es.phoneshop.model.cart.OutOfStockException;
 import com.es.phoneshop.model.enumsort.SortField;
 import com.es.phoneshop.model.enumsort.SortOrder;
 import com.es.phoneshop.model.product.ArrayListProductDao;
@@ -11,15 +15,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Optional;
 
 public class ProductListPageServlet extends HttpServlet {
 
+    public static final String ERROR = "error";
     private ProductDao productDao;
+    private CartService cartService;
 
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
         productDao = ArrayListProductDao.getInstance();
+        cartService = DefaultCartService.getInstance();
     }
 
     @Override
@@ -32,6 +41,32 @@ public class ProductListPageServlet extends HttpServlet {
                 Optional.ofNullable(sortOrder).map(SortOrder::valueOf).orElse(null)
         ));
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String quantityStr = request.getParameter("quantity");
+        String productIdStr = request.getParameter("productId");
+        Cart cart = cartService.getCart(request);
+        try {
+            NumberFormat format = NumberFormat.getInstance(request.getLocale());
+            int quantity = format.parse(quantityStr).intValue();
+            Long productId = Long.valueOf(productIdStr);
+            if (quantity < 0) {
+                throw new ParseException("Number is less than zero ", 0);
+            }
+            cartService.add(cart,productId,quantity);
+        } catch (NumberFormatException | ParseException | OutOfStockException e) {
+            if (e.getClass().equals(ParseException.class)) {
+                request.setAttribute(ERROR,"Not correct number " +  e.getMessage());
+                request.setAttribute("errorId",productIdStr);
+            } else {
+                request.setAttribute(ERROR,"Out of stock, available " + e.getMessage());
+                request.setAttribute("errorId",productIdStr);
+            }
+            doGet(request, response);
+
+        }
+        response.sendRedirect(request.getContextPath() + "/products?message=Success! Product added to cart");
     }
 
 

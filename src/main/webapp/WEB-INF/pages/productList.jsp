@@ -8,6 +8,18 @@
     <p>
         Welcome to Expert-Soft training!
     </p>
+    <p>
+        <c:if test="${not empty error}">
+            <span class="error">
+                    There was an error while adding to cart!
+            </span>
+        </c:if>
+    </p>
+    <p>
+        <span class="success">
+                ${param.message}
+        </span>
+    </p>
     <form>
         <input name="query" value="${param.query}">
         <button>Search</button>
@@ -25,6 +37,9 @@
                 Price
                 <tags:sortLink sort="price" order="asc"/>
                 <tags:sortLink sort="price" order="desc"/>
+            </td>
+            <td>
+                Add
             </td>
         </tr>
         </thead>
@@ -51,6 +66,20 @@
                             }
                         </script>
                     </a>
+                </td>
+                <td>
+                    <form method="post">
+                        <input type="text" name="quantity">
+                        <input type="hidden" name="productId" value="${product.id}">
+                        <button>Add to cart</button>
+                    </form>
+                    <p>
+                        <c:if test="${not empty error && product.id == ${errorId}">
+                            <span class="error">
+                                ${error}
+                            </span>
+                        </c:if>
+                    </p>
                 </td>
             </tr>
         </c:forEach>
