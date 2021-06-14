@@ -47,10 +47,11 @@ public class ProductListPageServlet extends HttpServlet {
         String quantityStr = request.getParameter("quantity");
         String productIdStr = request.getParameter("productId");
         Cart cart = cartService.getCart(request);
+        Long productId = 0L;
         try {
             NumberFormat format = NumberFormat.getInstance(request.getLocale());
             int quantity = format.parse(quantityStr).intValue();
-            Long productId = Long.valueOf(productIdStr);
+            productId = Long.valueOf(productIdStr);
             if (quantity < 0) {
                 throw new ParseException("Number is less than zero ", 0);
             }
@@ -58,10 +59,10 @@ public class ProductListPageServlet extends HttpServlet {
         } catch (NumberFormatException | ParseException | OutOfStockException e) {
             if (e.getClass().equals(ParseException.class)) {
                 request.setAttribute(ERROR,"Not correct number " +  e.getMessage());
-                request.setAttribute("errorId",productIdStr);
+                request.setAttribute("errorId",productId);
             } else {
                 request.setAttribute(ERROR,"Out of stock, available " + e.getMessage());
-                request.setAttribute("errorId",productIdStr);
+                request.setAttribute("errorId",productId);
             }
             doGet(request, response);
 

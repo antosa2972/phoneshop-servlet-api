@@ -17,8 +17,10 @@
     </p>
     <p>
         <span class="success">
+            <c:if test="${empty error}">
                 ${param.message}
         </span>
+        </c:if>
     </p>
     <form>
         <input name="query" value="${param.query}">
@@ -38,8 +40,8 @@
                 <tags:sortLink sort="price" order="asc"/>
                 <tags:sortLink sort="price" order="desc"/>
             </td>
-            <td>
-                Add
+            <td class="quantity">
+                Add to cart
             </td>
         </tr>
         </thead>
@@ -67,14 +69,14 @@
                         </script>
                     </a>
                 </td>
-                <td>
+                <td class="quantity">
                     <form method="post">
-                        <input type="text" name="quantity">
+                        <input class="quantity" type="text" name="quantity" value="${not empty error && product.id == errorId ? param.quantity:1}">
                         <input type="hidden" name="productId" value="${product.id}">
                         <button>Add to cart</button>
                     </form>
                     <p>
-                        <c:if test="${not empty error && product.id == ${errorId}">
+                        <c:if test="${not empty error && product.id == errorId}">
                             <span class="error">
                                 ${error}
                             </span>
