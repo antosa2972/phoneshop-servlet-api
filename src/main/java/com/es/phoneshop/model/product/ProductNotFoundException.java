@@ -3,7 +3,7 @@ package com.es.phoneshop.model.product;
 public class ProductNotFoundException extends RuntimeException {
     private final Long id;
 
-    ProductNotFoundException(Long productCode) {
+    public ProductNotFoundException(Long productCode) {
         this.id = productCode;
     }
 

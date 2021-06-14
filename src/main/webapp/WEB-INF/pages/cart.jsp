@@ -14,7 +14,7 @@
         </span>
     </p>
     <p>
-    <c:if test="${not empty errors}">
+    <c:if test="${not empty errors || not empty error}">
         <div class="error">
             There were some errors updating a cart.
         </div>
@@ -25,18 +25,9 @@
             <thead>
             <tr>
                 <td>Image</td>
-                <td>
-                    Description
-                </td>
-                <td class="quantity">
-                    Quantity
-                </td>
-                <td class="price">
-                    Price
-                </td>
-                <td>
-
-                </td>
+                <td>Description</td>
+                <td class="quantity">Quantity</td>
+                <td class="price">Price</td>
             </tr>
             </thead>
             <c:forEach var="item" items="${cart.items}" varStatus="status">

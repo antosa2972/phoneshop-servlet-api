@@ -80,6 +80,10 @@
         <error-code>500</error-code>
     </error-page>
     <error-page>
+        <location>/WEB-INF/pages/error.jsp</location>
+        <error-code>405</error-code>
+    </error-page>
+    <error-page>
         <location>/WEB-INF/pages/error404.jsp</location>
         <error-code>404</error-code>
     </error-page>
