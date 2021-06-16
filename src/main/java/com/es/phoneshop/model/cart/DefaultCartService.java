@@ -5,8 +5,9 @@ import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 public class DefaultCartService implements CartService {
 
@@ -47,6 +48,7 @@ public class DefaultCartService implements CartService {
         AtomicBoolean isProductUpdated = new AtomicBoolean(false);
         if (cart.getItems().size() == 0) {
             cart.getItems().add(new CartItem(product, quantity));
+            product.setStock(product.getStock() - quantity);
         } else {
             cart.getItems().forEach(cartItem -> {
                 if (cartItem.getProduct().getCode().equals(product.getCode())) {
@@ -59,13 +61,52 @@ public class DefaultCartService implements CartService {
                         e.printStackTrace();
                     }
                     cart.getItems().set(indexOfElementToUpdate, new CartItem(product, newQuantity));
+                    product.setStock(product.getStock() - quantity);
                     isProductUpdated.set(true);
                 }
             });
             if (!isProductUpdated.get() && !cart.getItems().isEmpty()) {
                 exceptionCheck(product, quantity);
                 cart.getItems().add(new CartItem(product, quantity));
+                product.setStock(product.getStock() - quantity);
             }
         }
+        recalculateCart(cart);
+    }
+
+    @Override
+    public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException {
+        Product product = productDao.getProduct(productId);
+        if (quantity <= 0) {
+            throw new OutOfStockException(product, quantity, 0);
+        }
+        if (productDao.getProduct(productId).getStock() < quantity) {
+            throw new OutOfStockException(product, quantity, product.getStock());
+        }
+        cart.getItems().forEach(cartItem -> {
+            if (cartItem.getProduct().getCode().equals(product.getCode())) {
+                cartItem.setQuantity(quantity);
+                //todo ...
+            }
+        });
+        recalculateCart(cart);
+    }
+
+    @Override
+    public synchronized void delete(Cart cart, Long productId) {
+        cart.getItems().removeIf(cartItem -> productId.equals(cartItem.getProduct().getId())
+        );
+        recalculateCart(cart);
+    }
+
+    public void recalculateCart(Cart cart) {
+        BigDecimal totalPrice = new BigDecimal("0.0");
+        cart.setTotalQuantity(cart.getItems().stream()
+                .map(CartItem::getQuantity)
+                .collect(Collectors.summingInt(q -> q.intValue())));
+        for (CartItem cartItem : cart.getItems()) {
+            totalPrice = totalPrice.add(cartItem.getProduct().getPrice());
+        }
+        cart.setTotalCost(totalPrice);
     }
 }

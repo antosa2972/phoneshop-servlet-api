@@ -130,4 +130,48 @@ public class CartServiceTest {
         cartService.add(cart,3L,5);
         assertFalse(cart.getItems().isEmpty());
     }
+    @Test(expected = NullPointerException.class)
+    public void addToCartTest4() throws OutOfStockException {
+        cartService.add(null,3L,5);
+    }
+    @Test
+    public void addToCartTest5() throws OutOfStockException {
+        cartService.add(cart,3L,5);
+        int oldQuantity = cart.getTotalQuantity();
+        cartService.add(cart,5L,3);
+        assertNotEquals(cart.getTotalQuantity(),oldQuantity);
+    }
+    @Test(expected = ProductNotFoundException.class)
+    public void updateCartTest1() throws OutOfStockException {
+        cartService.update(cart,Long.MAX_VALUE,Integer.MAX_VALUE);
+    }
+    @Test(expected = OutOfStockException.class)
+    public void updateCartTest2() throws OutOfStockException {
+        cartService.update(cart,3L,Integer.MAX_VALUE);
+    }
+    @Test
+    public void updateCartTest3() throws OutOfStockException {
+        cartService.update(cart,2L,3);
+    }
+    @Test(expected = NullPointerException.class)
+    public void updateCartTest4() throws OutOfStockException {
+        cartService.update(null,2L,3);
+    }
+    @Test()
+    public void deleteItemFromCartTest1()  {
+        cartService.delete(cart,Long.MAX_VALUE);
+    }
+    @Test(expected = NullPointerException.class)
+    public void deleteItemFromCartTest2() {
+        cartService.delete(null,Long.MAX_VALUE);
+    }
+    @Test()
+    public void deleteItemFromCartTest3() throws OutOfStockException {
+        cartService.add(cart,7L,3);
+        cartService.add(cart,6L,2);
+        cartService.add(cart,8L,2);
+        int oldQuantity = cart.getTotalQuantity();
+        cartService.delete(cart,6L);
+        assertNotEquals(cart.getTotalQuantity(), oldQuantity);
+    }
 }

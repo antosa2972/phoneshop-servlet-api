@@ -21,7 +21,7 @@ td {
   border : 1px solid gray;
   vertical-align: top;
 }
-.price .quantity {
+.price, .quantity {
   text-align: right;
 }
 img.product-tile {
@@ -37,7 +37,10 @@ img.product-tile {
   table-layout: fixed;
   table-border-color-dark: #2b2b2b;
 }
-
+header .cart{
+  float: right;
+  font-size: 35px;
+}
 /* Page specific styles */
 body.product-list {
 

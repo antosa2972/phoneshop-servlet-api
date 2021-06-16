@@ -3,7 +3,10 @@ package com.es.phoneshop.model.product;
 import com.es.phoneshop.model.enumsort.SortField;
 import com.es.phoneshop.model.enumsort.SortOrder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Collectors;
@@ -18,7 +21,7 @@ public class ArrayListProductDao implements ProductDao {
         return instance;
     }
 
-    private List<Product> products;
+    private final List<Product> products;
     private long maxId;
     ReadWriteLock readWriteLock;
 
