@@ -1,8 +1,11 @@
-package com.es.phoneshop.model.cart;
+package com.es.phoneshop.service.cart_service;
 
-import com.es.phoneshop.model.product.ArrayListProductDao;
+import com.es.phoneshop.dao.ArrayListProductDao;
+import com.es.phoneshop.model.cart.Cart;
+import com.es.phoneshop.model.cart.cart_item.CartItem;
+import com.es.phoneshop.model.cart.exception.OutOfStockException;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.dao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;

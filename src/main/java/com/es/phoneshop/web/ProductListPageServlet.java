@@ -1,13 +1,13 @@
 package com.es.phoneshop.web;
 
+import com.es.phoneshop.dao.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.DefaultCartService;
-import com.es.phoneshop.model.cart.OutOfStockException;
+import com.es.phoneshop.model.cart.exception.OutOfStockException;
 import com.es.phoneshop.model.enumsort.SortField;
 import com.es.phoneshop.model.enumsort.SortOrder;
-import com.es.phoneshop.model.product.ArrayListProductDao;
-import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.service.cart_service.CartService;
+import com.es.phoneshop.service.cart_service.DefaultCartService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -42,6 +42,7 @@ public class ProductListPageServlet extends HttpServlet {
         ));
         request.getRequestDispatcher("/WEB-INF/pages/productList.jsp").forward(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quantityStr = request.getParameter("quantity");
@@ -55,14 +56,14 @@ public class ProductListPageServlet extends HttpServlet {
             if (quantity < 0) {
                 throw new ParseException("Number is less than zero ", 0);
             }
-            cartService.add(cart,productId,quantity);
+            cartService.add(cart, productId, quantity);
         } catch (NumberFormatException | ParseException | OutOfStockException e) {
             if (e.getClass().equals(ParseException.class)) {
-                request.setAttribute(ERROR,"Not correct number " +  e.getMessage());
-                request.setAttribute("errorId",productId);
+                request.setAttribute(ERROR, "Not correct number " + e.getMessage());
+                request.setAttribute("errorId", productId);
             } else {
-                request.setAttribute(ERROR,"Out of stock, available " + e.getMessage());
-                request.setAttribute("errorId",productId);
+                request.setAttribute(ERROR, "Out of stock, available " + e.getMessage());
+                request.setAttribute("errorId", productId);
             }
             doGet(request, response);
 
