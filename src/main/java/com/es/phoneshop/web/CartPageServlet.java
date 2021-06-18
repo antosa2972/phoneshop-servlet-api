@@ -1,10 +1,10 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.DefaultCartService;
-import com.es.phoneshop.model.cart.OutOfStockException;
-import com.es.phoneshop.model.product.ArrayListProductDao;
-import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.service.cart_service.CartService;
+import com.es.phoneshop.service.cart_service.DefaultCartService;
+import com.es.phoneshop.model.cart.exception.OutOfStockException;
+import com.es.phoneshop.dao.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,6 +19,7 @@ import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
     public static final String ERROR = "error";
+    public static final String WEB_INF_PAGES_CART_JSP = "/WEB-INF/pages/cart.jsp";
     private ProductDao productDao;
     private CartService cartService;
 
@@ -31,7 +32,7 @@ public class CartPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cart", cartService.getCart(request));
-        request.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(request, response);
+        request.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(request, response);
     }
 
     @Override

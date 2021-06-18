@@ -1,5 +1,7 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.model.product.price_history.PriceHistory;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Currency;

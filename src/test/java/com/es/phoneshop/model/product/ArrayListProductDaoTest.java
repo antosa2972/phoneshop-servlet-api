@@ -1,7 +1,11 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.dao.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.model.enumsort.SortField;
 import com.es.phoneshop.model.enumsort.SortOrder;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
+import com.es.phoneshop.model.product.price_history.PriceHistory;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,9 +1,9 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.DefaultCartService;
-import com.es.phoneshop.model.product.ProductNotFoundException;
+import com.es.phoneshop.service.cart_service.CartService;
+import com.es.phoneshop.service.cart_service.DefaultCartService;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,8 +37,7 @@ public class DeleteCartItemServlet extends HttpServlet {
             req.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(req,resp);
         }
         catch (ProductNotFoundException e){
-            req.setAttribute(ERROR,"No such product in the cart");
-            req.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(req,resp);
+            resp.sendRedirect(req.getContextPath() + "/cart?message=Cart item not removed");
         }
 
         resp.sendRedirect(req.getContextPath() + "/cart?message=Cart item removed successfully");

@@ -1,7 +1,9 @@
-package com.es.phoneshop.model.product;
+package com.es.phoneshop.dao;
 
 import com.es.phoneshop.model.enumsort.SortField;
 import com.es.phoneshop.model.enumsort.SortOrder;
+import com.es.phoneshop.model.product.Product;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
 
 import java.util.List;
 
