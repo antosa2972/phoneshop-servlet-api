@@ -5,8 +5,8 @@ import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.model.cart.exception.OutOfStockException;
 import com.es.phoneshop.model.product.Product;
 import com.es.phoneshop.model.product.price_history.PriceHistory;
-import com.es.phoneshop.service.cart_service.CartService;
-import com.es.phoneshop.service.cart_service.DefaultCartService;
+import com.es.phoneshop.service.cartservice.CartService;
+import com.es.phoneshop.service.cartservice.DefaultCartService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,7 +26,6 @@ import java.util.Currency;
 import java.util.GregorianCalendar;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

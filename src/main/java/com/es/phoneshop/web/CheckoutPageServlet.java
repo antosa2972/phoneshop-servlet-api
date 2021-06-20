@@ -4,10 +4,10 @@ import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.order.Order;
 import com.es.phoneshop.model.order.PaymentMethods;
 import com.es.phoneshop.model.order.exception.OrderNotFoundException;
-import com.es.phoneshop.service.cart_service.CartService;
-import com.es.phoneshop.service.cart_service.DefaultCartService;
-import com.es.phoneshop.service.order_service.DefaultOrderService;
-import com.es.phoneshop.service.order_service.OrderService;
+import com.es.phoneshop.service.cartservice.CartService;
+import com.es.phoneshop.service.cartservice.DefaultCartService;
+import com.es.phoneshop.service.orderservice.DefaultOrderService;
+import com.es.phoneshop.service.orderservice.OrderService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,6 +23,7 @@ import java.util.function.Consumer;
 public class CheckoutPageServlet extends HttpServlet {
     public static final String ERRORS = "errors";
     public static final String WEB_INF_PAGES_CHECKOUT_JSP = "/WEB-INF/pages/checkout.jsp";
+    public static final String CART_PAGE_JSP = "/WEB-INF/pages/cart.jsp";
     public static final String ORDER = "order";
     public static final String FIRST_NAME_PARAM = "firstName";
     public static final String LAST_NAME_PARAM = "lastName";
@@ -30,6 +31,7 @@ public class CheckoutPageServlet extends HttpServlet {
     public static final String DELIVERY_ADDRESS_PARAM = "deliveryAddress";
     public static final String DELIVERY_DATE_PARAM = "deliveryDate";
     public static final String PAYMENT_METHOD_PARAM = "paymentMethod";
+    public static final String ERROR = "error";
     private CartService cartService;
     private OrderService orderService;
 
@@ -42,6 +44,10 @@ public class CheckoutPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Cart cart = cartService.getCart(request);
+        if(cart.getItems().isEmpty()){
+            response.sendRedirect(request.getContextPath() + "/cart?errorMsg=Empty cart");
+            return;
+        }
         request.setAttribute(ORDER, orderService.getOrder(cart));
         request.getRequestDispatcher(WEB_INF_PAGES_CHECKOUT_JSP).forward(request, response);
     }
@@ -98,6 +104,10 @@ public class CheckoutPageServlet extends HttpServlet {
         } else {
             String[] dateParsed = parameter.split("-");
             LocalDate localDate = LocalDate.of(Integer.parseInt(dateParsed[0]), Integer.parseInt(dateParsed[1]), Integer.parseInt(dateParsed[2]));
+            LocalDate currentDate = LocalDate.now();
+            if(localDate.isBefore(currentDate)){
+                errors.put(DELIVERY_DATE_PARAM,"Not correct date");
+            }
             order.setDeliveryDate(localDate);
         }
     }

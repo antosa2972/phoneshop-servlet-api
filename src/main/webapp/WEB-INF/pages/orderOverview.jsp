@@ -45,9 +45,9 @@
             </tr>
         </c:forEach>
         <tr>
-            <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-bottom: solid white"></td>
+            <td class="noTableBorderLeftRightBottom"></td>
+            <td class="noTableBorderRightBottom"></td>
+            <td class="noTableBorderBottom"></td>
             <td>
                 <h3 class="quantity">
                     Total quantity:${order.items.size()}
@@ -55,9 +55,9 @@
             </td>
         </tr>
         <tr>
-            <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-bottom: solid white"></td>
+            <td class="noTableBorderLeftRightBottom"></td>
+            <td class="noTableBorderRightBottom"></td>
+            <td class="noTableBorderBottom"></td>
             <td>
                 <h3 class="price">
                     Subtotal: <fmt:formatNumber value="${order.subtotal}" type="currency"
@@ -66,9 +66,9 @@
             </td>
         </tr>
         <tr>
-            <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-bottom: solid white"></td>
+            <td class="noTableBorderLeftRightBottom"></td>
+            <td class="noTableBorderRightBottom"></td>
+            <td class="noTableBorderBottom"></td>
             <td>
                 <h3 class="price">
                     Delivery cost:<fmt:formatNumber value="${order.deliveryCost}" type="currency"
@@ -77,9 +77,9 @@
             </td>
         </tr>
         <tr>
-            <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-right: solid white; border-bottom: solid white"></td>
-            <td style="border-bottom: solid white"></td>
+            <td class="noTableBorderLeftRightBottom"></td>
+            <td class="noTableBorderRightBottom"></td>
+            <td class="noTableBorderBottom"></td>
             <td>
                 <h3 class="price">
                     Total cost:<fmt:formatNumber value="${order.totalCost}" type="currency"

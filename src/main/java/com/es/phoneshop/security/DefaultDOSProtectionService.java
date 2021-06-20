@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultDOSProtectionService implements DOSProtectionService {
 
-    private static final long THERESHOLD = 10;
+    private static final long THERESHOLD = 2000;
     public static final int MINUTE = 60000;
     Date beginOfMinute;
     private Map<String, Long> countMap = new ConcurrentHashMap<>();

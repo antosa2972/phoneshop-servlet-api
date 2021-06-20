@@ -14,6 +14,11 @@
         </span>
     </p>
     <p>
+        <span class="error">
+                ${param.errorMsg}
+        </span>
+    </p>
+    <p>
     <c:if test="${not empty errors || not empty error}">
         <div class="error">
             There were some errors updating a cart.

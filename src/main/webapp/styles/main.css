@@ -41,6 +41,21 @@ header .cart{
   float: right;
   font-size: 35px;
 }
+.red{
+  color:red
+}
+.noTableBorderLeftRightBottom{
+  border-left: solid white;
+  border-right: solid white;
+  border-bottom: solid white;
+}
+.noTableBorderRightBottom{
+  border-right: solid white;
+  border-bottom: solid white;
+}
+.noTableBorderBottom{
+  border-bottom: solid white;
+}
 /* Page specific styles */
 body.product-list {
 

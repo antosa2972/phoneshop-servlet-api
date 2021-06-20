@@ -1,4 +1,4 @@
-package com.es.phoneshop.service.cart_service;
+package com.es.phoneshop.service.cartservice;
 
 import com.es.phoneshop.dao.ArrayListProductDao;
 import com.es.phoneshop.dao.ProductDao;

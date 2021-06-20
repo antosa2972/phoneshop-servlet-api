@@ -58,9 +58,9 @@
                 </tr>
             </c:forEach>
             <tr>
-                <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-bottom: solid white"></td>
+                <td class="noTableBorderLeftRightBottom"></td>
+                <td class="noTableBorderRightBottom"></td>
+                <td class="noTableBorderBottom"></td>
                 <td>
                     <h3 class="quantity">
                         Total quantity:${cart.totalQuantity}
@@ -68,9 +68,9 @@
                 </td>
             </tr>
             <tr>
-                <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-bottom: solid white"></td>
+                <td class="noTableBorderLeftRightBottom"></td>
+                <td class="noTableBorderRightBottom"></td>
+                <td class="noTableBorderBottom"></td>
                 <td>
                     <h3 class="price">
                         Subtotal: <fmt:formatNumber value="${order.subtotal}" type="currency"
@@ -79,9 +79,9 @@
                 </td>
             </tr>
             <tr>
-                <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-bottom: solid white"></td>
+                <td class="noTableBorderLeftRightBottom"></td>
+                <td class="noTableBorderRightBottom"></td>
+                <td class="noTableBorderBottom"></td>
                 <td>
                     <h3 class="price">
                         Delivery cost:<fmt:formatNumber value="${order.deliveryCost}" type="currency"
@@ -90,9 +90,9 @@
                 </td>
             </tr>
             <tr>
-                <td style="border-left: solid white; border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-right: solid white; border-bottom: solid white"></td>
-                <td style="border-bottom: solid white"></td>
+                <td class="noTableBorderLeftRightBottom"></td>
+                <td class="noTableBorderRightBottom"></td>
+                <td class="noTableBorderBottom"></td>
                 <td>
                     <h3 class="price">
                         Total cost:<fmt:formatNumber value="${order.totalCost}" type="currency"
@@ -103,20 +103,30 @@
         </table>
         <h2>Order details</h2>
         <table>
-            <tags:orderFormRow name="firstName" label="First name" order="${order}" errors="${errors}"></tags:orderFormRow>
-            <tags:orderFormRow name="lastName" label="Last name" order="${order}" errors="${errors}"></tags:orderFormRow>
+            <tags:orderFormRow name="firstName" label="First name" order="${order}"
+                               errors="${errors}"></tags:orderFormRow>
+            <tags:orderFormRow name="lastName" label="Last name" order="${order}"
+                               errors="${errors}"></tags:orderFormRow>
             <tags:orderFormRow name="phone" label="Phone" order="${order}" errors="${errors}"></tags:orderFormRow>
             <tr>
-                <td>Delivery date<span style="color:red">*</span></td>
-                <td><input name="deliveryDate" type="date"></td>
+                <c:set var="error" value="${errors['deliveryDate']}"/>
+                <td>Delivery date<span class="red">*</span></td>
+                <td><input name="deliveryDate" type="date">
+                    <c:if test="${not empty error}">
+                        <div class="error">
+                                ${error}
+                        </div>
+                    </c:if>
+                </td>
             </tr>
-            <tags:orderFormRow name="deliveryAddress" label="Delivery address" order="${order}" errors="${errors}"></tags:orderFormRow>
+            <tags:orderFormRow name="deliveryAddress" label="Delivery address" order="${order}"
+                               errors="${errors}"></tags:orderFormRow>
             <tr>
-                <td>Payment method<span style="color:red">*</span></td>
+                <td>Payment method<span class="red">*</span></td>
                 <td>
                     <label>
-                        CACHE
-                        <input name="paymentMethod" type="radio" value="CACHE" checked>
+                        CASH
+                        <input name="paymentMethod" type="radio" value="CASH" checked>
                     </label>
                     <label>
                         CARD

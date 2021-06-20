@@ -1,4 +1,4 @@
-package com.es.phoneshop.service.order_service;
+package com.es.phoneshop.service.orderservice;
 
 import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.order.Order;

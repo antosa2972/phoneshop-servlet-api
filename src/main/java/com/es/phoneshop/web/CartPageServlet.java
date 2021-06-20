@@ -3,8 +3,8 @@ package com.es.phoneshop.web;
 import com.es.phoneshop.dao.ArrayListProductDao;
 import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.model.cart.exception.OutOfStockException;
-import com.es.phoneshop.service.cart_service.CartService;
-import com.es.phoneshop.service.cart_service.DefaultCartService;
+import com.es.phoneshop.service.cartservice.CartService;
+import com.es.phoneshop.service.cartservice.DefaultCartService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -40,7 +40,8 @@ public class CartPageServlet extends HttpServlet {
         String[] productIds = request.getParameterValues("productId");
         String[] quantities = request.getParameterValues("quantity");
         Map<Long, String> errors = new HashMap<>();
-        if (productIds == null || productIds.length == 0 || quantities == null) {
+        if (productIds == null || productIds.length == 0 || quantities == null
+                || cartService.getCart(request).getItems().isEmpty()) {
             errors.put(0L, "Empty cart!");
         } else {
             for (int i = 0; i < productIds.length; i++) {
