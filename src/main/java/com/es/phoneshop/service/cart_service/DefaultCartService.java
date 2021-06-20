@@ -1,11 +1,11 @@
 package com.es.phoneshop.service.cart_service;
 
 import com.es.phoneshop.dao.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
 import com.es.phoneshop.model.cart.Cart;
 import com.es.phoneshop.model.cart.cart_item.CartItem;
 import com.es.phoneshop.model.cart.exception.OutOfStockException;
 import com.es.phoneshop.model.product.Product;
-import com.es.phoneshop.dao.ProductDao;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
@@ -46,7 +46,7 @@ public class DefaultCartService implements CartService {
 
     @Override
     public synchronized void add(Cart cart, Long productId, int quantity) throws OutOfStockException {
-        Product product = productDao.getProduct(productId);
+        Product product = productDao.getItem(productId);
         exceptionCheck(product, quantity);
         AtomicBoolean isProductUpdated = new AtomicBoolean(false);
         if (cart.getItems().size() == 0) {
@@ -79,17 +79,16 @@ public class DefaultCartService implements CartService {
 
     @Override
     public synchronized void update(Cart cart, Long productId, int quantity) throws OutOfStockException {
-        Product product = productDao.getProduct(productId);
+        Product product = productDao.getItem(productId);
         if (quantity <= 0) {
             throw new OutOfStockException(product, quantity, 0);
         }
-        if (productDao.getProduct(productId).getStock() < quantity) {
+        if (productDao.getItem(productId).getStock() < quantity) {
             throw new OutOfStockException(product, quantity, product.getStock());
         }
         cart.getItems().forEach(cartItem -> {
             if (cartItem.getProduct().getCode().equals(product.getCode())) {
                 cartItem.setQuantity(quantity);
-                //todo ...
             }
         });
         recalculateCart(cart);
@@ -100,6 +99,13 @@ public class DefaultCartService implements CartService {
         cart.getItems().removeIf(cartItem -> productId.equals(cartItem.getProduct().getId())
         );
         recalculateCart(cart);
+    }
+
+    @Override
+    public void clearCart(Cart cart) {
+        cart.getItems().clear();
+        cart.setTotalQuantity(0);
+        cart.setTotalCost(new BigDecimal(0L));
     }
 
     public void recalculateCart(Cart cart) {
