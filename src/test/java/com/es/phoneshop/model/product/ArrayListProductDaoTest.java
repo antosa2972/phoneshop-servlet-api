@@ -32,7 +32,7 @@ public class ArrayListProductDaoTest {
                 Arrays.asList(new PriceHistory(new GregorianCalendar(2005,10,10),new BigDecimal(100))));
         productDao.save(product);
         assertFalse(product.getId() < 0);
-        Product result = productDao.getProduct(product.getId());
+        Product result = productDao.getItem(product.getId());
         assertNotNull(result);
         assertEquals(product_code, result.getCode());
     }
@@ -53,13 +53,13 @@ public class ArrayListProductDaoTest {
             assertNotNull(prod.getPrice());
         }
     }
-    @Test(expected = ProductNotFoundException.class)
+    @Test(expected = NoSuchElementException.class)
     public void deleteProductTest() throws ProductNotFoundException {
         Long id = 2L;
-        Product product = productDao.getProduct(id);
+        Product product = productDao.getItem(id);
         assertEquals(product.getId(), id);
         productDao.delete(id);
-        product = productDao.getProduct(id);
+        product = productDao.getItem(id);
     }
     @Test
     public void wordCoincidenceSearchTest1(){
