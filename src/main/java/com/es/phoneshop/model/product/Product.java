@@ -1,5 +1,6 @@
 package com.es.phoneshop.model.product;
 
+import com.es.phoneshop.dao.IdentifiableItem;
 import com.es.phoneshop.model.product.price_history.PriceHistory;
 
 import java.io.Serializable;
@@ -7,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Currency;
 import java.util.List;
 
-public class Product implements Comparable<Product>, Serializable {
+public class Product extends IdentifiableItem implements Comparable<Product>, Serializable {
     private Long id;
     private String code;
     private String description;
