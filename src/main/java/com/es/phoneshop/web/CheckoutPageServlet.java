@@ -64,7 +64,7 @@ public class CheckoutPageServlet extends HttpServlet {
             errors.put("error", "Order not found");
         }
         if (errors.isEmpty()) {
-            response.sendRedirect(request.getContextPath() + "/order/overview/" + order.getSecureId());
+            response.sendRedirect(request.getContextPath() + "/order/overview/"+ order.getSecureId());
         } else {
             request.setAttribute(ERRORS, errors);
             request.setAttribute(ORDER, order);
