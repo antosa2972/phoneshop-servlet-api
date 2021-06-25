@@ -5,7 +5,7 @@
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <tags:master pageTitle="Product not found">
     <h1>
-        Product not found. Product id: ${pageContext.exception.getId()}
+        Order not found: ${pageContext.exception.message}
     </h1>
     <p>
         An unexpected error

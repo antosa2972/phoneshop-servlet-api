@@ -14,9 +14,15 @@
         </span>
     </p>
     <p>
+        <span class="error">
+                ${param.errorMsg}
+        </span>
+    </p>
+    <p>
     <c:if test="${not empty errors || not empty error}">
         <div class="error">
             There were some errors updating a cart.
+                ${errors[0]}
         </div>
     </c:if>
     </p>
@@ -85,6 +91,9 @@
         <p>
             <button>Update</button>
         </p>
+    </form>
+    <form action="${pageContext.servletContext.contextPath}/checkout" method="get">
+        <button>Checkout</button>
     </form>
     <form id="deleteCartItem" method="post"></form>
 </tags:master>

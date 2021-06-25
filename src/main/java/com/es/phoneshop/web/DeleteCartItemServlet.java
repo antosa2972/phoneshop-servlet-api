@@ -1,9 +1,9 @@
 package com.es.phoneshop.web;
 
 import com.es.phoneshop.model.cart.Cart;
-import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.DefaultCartService;
-import com.es.phoneshop.model.product.ProductNotFoundException;
+import com.es.phoneshop.model.product.exception.ProductNotFoundException;
+import com.es.phoneshop.service.cartservice.CartService;
+import com.es.phoneshop.service.cartservice.DefaultCartService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,24 +29,23 @@ public class DeleteCartItemServlet extends HttpServlet {
             if (productId < 0) {
                 throw new ParseException("Number is less than zero", 0);
             }
-            if(isProductInCart(cart,productId)){
-            cartService.delete(cart, productId);
-            }else throw  new ProductNotFoundException(productId);
-        }catch (ParseException e){
-            req.setAttribute(ERROR,"Not a number!");
-            req.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(req,resp);
-        }
-        catch (ProductNotFoundException e){
-            req.setAttribute(ERROR,"No such product in the cart");
-            req.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(req,resp);
+            if (isProductInCart(cart, productId)) {
+                cartService.delete(cart, productId);
+            } else throw new ProductNotFoundException(productId);
+        } catch (ParseException e) {
+            req.setAttribute(ERROR, "Not a number!");
+            req.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(req, resp);
+        } catch (ProductNotFoundException e) {
+            resp.sendRedirect(req.getContextPath() + "/cart?message=Cart item not removed");
         }
 
         resp.sendRedirect(req.getContextPath() + "/cart?message=Cart item removed successfully");
     }
-    private boolean isProductInCart(Cart cart,Long id){
+
+    private boolean isProductInCart(Cart cart, Long id) {
         AtomicBoolean check = new AtomicBoolean(false);
         cart.getItems().forEach(cartItem -> {
-            if(cartItem.getProduct().getId().equals(id)){
+            if (cartItem.getProduct().getId().equals(id)) {
                 check.set(true);
             }
         });

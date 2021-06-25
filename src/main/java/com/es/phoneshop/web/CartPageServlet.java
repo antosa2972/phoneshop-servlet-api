@@ -1,10 +1,10 @@
 package com.es.phoneshop.web;
 
-import com.es.phoneshop.model.cart.CartService;
-import com.es.phoneshop.model.cart.DefaultCartService;
-import com.es.phoneshop.model.cart.OutOfStockException;
-import com.es.phoneshop.model.product.ArrayListProductDao;
-import com.es.phoneshop.model.product.ProductDao;
+import com.es.phoneshop.dao.ArrayListProductDao;
+import com.es.phoneshop.dao.ProductDao;
+import com.es.phoneshop.model.cart.exception.OutOfStockException;
+import com.es.phoneshop.service.cartservice.CartService;
+import com.es.phoneshop.service.cartservice.DefaultCartService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CartPageServlet extends HttpServlet {
-    public static final String ERROR = "error";
+    public static final String ERRORS = "errors";
+    public static final String WEB_INF_PAGES_CART_JSP = "/WEB-INF/pages/cart.jsp";
     private ProductDao productDao;
     private CartService cartService;
 
@@ -31,7 +32,7 @@ public class CartPageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("cart", cartService.getCart(request));
-        request.getRequestDispatcher("/WEB-INF/pages/cart.jsp").forward(request, response);
+        request.getRequestDispatcher(WEB_INF_PAGES_CART_JSP).forward(request, response);
     }
 
     @Override
@@ -39,31 +40,35 @@ public class CartPageServlet extends HttpServlet {
         String[] productIds = request.getParameterValues("productId");
         String[] quantities = request.getParameterValues("quantity");
         Map<Long, String> errors = new HashMap<>();
-        for (int i = 0; i < productIds.length; i++) {
-            Long productId = Long.valueOf(productIds[i]);
-            int quantity;
+        if (productIds == null || productIds.length == 0 || quantities == null
+                || cartService.getCart(request).getItems().isEmpty()) {
+            errors.put(0L, "Empty cart!");
+        } else {
+            for (int i = 0; i < productIds.length; i++) {
+                Long productId = Long.valueOf(productIds[i]);
+                int quantity;
 
-            try {
-                quantity = getQuantity(quantities[i], request);
-                if (quantity < 0) {
-                    throw new ParseException("Number is less than zero", 0);
-                }
-                cartService.update(cartService.getCart(request), productId, quantity);
-            } catch (ParseException | OutOfStockException e) {
-                if (e.getClass().equals(ParseException.class)) {
-                    errors.put(productId, "Not correct number, " + e.getMessage());
-                } else {
-                    errors.put(productId, "Out of stock. " + e.getMessage());
-                }
+                try {
+                    quantity = getQuantity(quantities[i], request);
+                    if (quantity < 0) {
+                        throw new ParseException("Number is less than zero", 0);
+                    }
+                    cartService.update(cartService.getCart(request), productId, quantity);
+                } catch (ParseException | OutOfStockException e) {
+                    if (e.getClass().equals(ParseException.class)) {
+                        errors.put(productId, "Not correct number, " + e.getMessage());
+                    } else {
+                        errors.put(productId, "Out of stock. " + e.getMessage());
+                    }
 
+                }
             }
-
 
         }
         if (errors.isEmpty()) {
             response.sendRedirect(request.getContextPath() + "/cart?message=Cart updated successfully");
         } else {
-            request.setAttribute("errors", errors);
+            request.setAttribute(ERRORS, errors);
             doGet(request, response);
         }
     }
