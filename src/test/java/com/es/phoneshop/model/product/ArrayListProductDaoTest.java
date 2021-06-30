@@ -2,6 +2,7 @@ package com.es.phoneshop.model.product;
 
 import com.es.phoneshop.dao.ArrayListProductDao;
 import com.es.phoneshop.dao.ProductDao;
+import com.es.phoneshop.model.SearchTypes;
 import com.es.phoneshop.model.enumsort.SortField;
 import com.es.phoneshop.model.enumsort.SortOrder;
 import com.es.phoneshop.model.product.exception.ProductNotFoundException;
@@ -91,6 +92,10 @@ public class ArrayListProductDaoTest {
         ArrayListProductDao arrayListProductDao = (ArrayListProductDao) ArrayListProductDao.getInstance();
         double value = arrayListProductDao.wordCoincidenceSearch(words,"testtesttesttesttesttesttesttesttesttesttesttestesttesttesttesttest");
         assertFalse(value>0);
+    }
+    @Test
+    public void advancedSearchTest() {
+       assertNotNull(productDao.advancedSearch("Apple","ALL_WORDS",new BigDecimal(0L),new BigDecimal(100L)));
     }
 }
 

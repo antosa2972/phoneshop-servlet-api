@@ -14,6 +14,15 @@
     </listener>
 
     <servlet>
+        <servlet-name>advancedSearch</servlet-name>
+        <servlet-class>com.es.phoneshop.web.AdvancedSearchPageServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>advancedSearch</servlet-name>
+        <url-pattern>/advancedSearch</url-pattern>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>productList</servlet-name>
         <servlet-class>com.es.phoneshop.web.ProductListPageServlet</servlet-class>
     </servlet>

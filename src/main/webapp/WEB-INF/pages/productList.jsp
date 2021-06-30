@@ -71,14 +71,15 @@
                 </td>
                 <td class="quantity">
                     <form method="post">
-                        <input class="quantity" type="text" name="quantity" value="${not empty error && product.id == errorId ? param.quantity:1}">
+                        <input class="quantity" type="text" name="quantity"
+                               value="${not empty error && product.id == errorId ? param.quantity:1}">
                         <input type="hidden" name="productId" value="${product.id}">
                         <button>Add to cart</button>
                     </form>
                     <p>
                         <c:if test="${not empty error && product.id == errorId}">
                             <span class="error">
-                                ${error}
+                                    ${error}
                             </span>
                         </c:if>
                     </p>
@@ -86,4 +87,7 @@
             </tr>
         </c:forEach>
     </table>
+    <form action="${pageContext.servletContext.contextPath}/advancedSearch" method="get">
+        <button>Advanced search</button>
+    </form>
 </tags:master>
