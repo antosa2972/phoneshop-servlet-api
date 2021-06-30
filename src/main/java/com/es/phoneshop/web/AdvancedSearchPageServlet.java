@@ -45,11 +45,10 @@ public class AdvancedSearchPageServlet extends HttpServlet {
         }
         if(description == null || description.isEmpty()){
             req.setAttribute("products",productDao.findProducts(null,null,null));
-        }else {
+        }else{
             BigDecimal minimalPrice = parsePrice(minPrice,"Minimal price");
             BigDecimal maximalPrice = parsePrice(maxPrice,"Maximal price");
             req.setAttribute("products",productDao.advancedSearch(description,typeOfSearch,minimalPrice,maximalPrice));
-            req.setAttribute("success","search success");
         }
         req.setAttribute("typeOfSearches", Arrays.asList(SearchTypes.values()));
         req.getRequestDispatcher(SEARCH_PAGE_JSP).forward(req, resp);
